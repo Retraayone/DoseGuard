@@ -59,8 +59,8 @@ class MedicineDataset(Dataset):
         
         print(f"Using columns - Image: {self.image_column}, Label: {self.label_column}")
         
-        # Get unique classes
-        self.classes = self.medicine_frame[self.label_column].unique()
+        # Get unique classes and convert to strings
+        self.classes = [str(c) for c in self.medicine_frame[self.label_column].unique()]
         self.label_to_idx = {label: idx for idx, label in enumerate(self.classes)}
     
     def __len__(self):
@@ -73,7 +73,7 @@ class MedicineDataset(Dataset):
         
         img_name = os.path.join(self.root_dir, str(self.medicine_frame.iloc[idx][self.image_column]))
         image = Image.open(img_name).convert('RGB')
-        label = self.medicine_frame.iloc[idx][self.label_column]
+        label = str(self.medicine_frame.iloc[idx][self.label_column])  # Convert to string
         label_idx = self.label_to_idx[label]
         
         if self.transform:
