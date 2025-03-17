@@ -82,16 +82,17 @@ class MedicineDataset(Dataset):
         return image, label_idx, label
 
 # CNN Model
+# Update the DoseGuardCNN class
 class DoseGuardCNN(nn.Module):
     def __init__(self, num_classes):
         super(DoseGuardCNN, self).__init__()
-        # Use a pre-trained ResNet as the backbone
-        self.model = models.resnet18(pretrained=True)
+        # Use the new weights parameter instead of pretrained
+        self.model = models.resnet18(weights=models.ResNet18_Weights.IMAGENET1K_V1)
         
         # Replace the final fully connected layer with one matching our number of classes
         num_features = self.model.fc.in_features
         self.model.fc = nn.Linear(num_features, num_classes)
-        
+    
     def forward(self, x):
         return self.model(x)
 
